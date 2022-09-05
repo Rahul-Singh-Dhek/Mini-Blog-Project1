@@ -3,12 +3,12 @@ const ObjectId=mongoose.Schema.Types.ObjectId
 
 const blogsSchema= new mongoose.Schema({
 title:{
-    type:string,
+    type:String,
     required:true
 },
 body:{
-    type:string,
-    required:mandatory
+    type:String,
+    required:true
 },
 authorId:{
     type:ObjectId,
