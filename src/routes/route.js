@@ -12,6 +12,10 @@ router.post('/authors',authorController.createAuthor)
 
 router.post('/blogs',blogsController.createBlogs)
 
+//=======================================getBlogs================================================
+
+router.get('blogs',blogsController.getBlogs)
+
 
 
 

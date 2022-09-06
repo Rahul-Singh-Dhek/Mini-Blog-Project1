@@ -74,6 +74,28 @@ let createBlogs = async function (req, res) {
         res.status(500).send({ msg: error.message })
     }
 }
+
+let getBlogs=async function(req,res){
+
+    let filter={isDeleted:false,isPublished:true}
+    if(req.query["author Id"]){
+        filter["authorId"]=req.query["author Id"]
+    }
+    if(req.query["category"]){
+        filter["category"]=req.query["category"]
+    }
+    if(req.query["tag"]){
+        filter["tags"]=req.query["tag"]
+    }
+    if(req.query["subcategory"]){
+        filter["subcategory"]=req.query["subcategory"]
+    }
+
+    let data=await blogsModels.find(filter)
+    res.send({data:data})
+}
+
 module.exports.createBlogs = createBlogs
+module.exports.getBlogs = getBlogs
 
 
