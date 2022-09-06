@@ -1,5 +1,6 @@
-const blogsModels = require("../Models/blogsModels.js");
+const blogsModels = require("../Models/blogsModels");
 const authorModels = require("../Models/authorModels");
+const mongoose=require('mongoose')
 
 
 // ==========================================CreateBlogs===========================================//
@@ -72,6 +73,7 @@ let createBlogs = async function (req, res) {
     }
     catch (error) {
         res.status(500).send({ msg: error.message })
+        console.log(error)
     }
 }
 
