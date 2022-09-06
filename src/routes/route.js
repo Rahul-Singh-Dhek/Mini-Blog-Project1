@@ -3,8 +3,16 @@ const router = express.Router();
 const authorController=require('../controller/authorController')
 const blogsController=require('../controller/blogsController')
 
+
+// ===================================authorApi=================================================
+
 router.post('/authors',authorController.createAuthor)
+
+//======================================blogApi===================================================
+
 router.post('/blogs',blogsController.createBlogs)
+
+
 
 
 module.exports = router;

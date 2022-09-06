@@ -1,6 +1,10 @@
 const blogsModels = require("../Models/blogsModels.js");
 const authorModels = require("../Models/authorModels");
-const mongoose = require("mongoose")
+
+
+// ==========================================CreateBlogs===========================================//
+
+
 let createBlogs = async function (req, res) {
 
     try {
@@ -61,9 +65,8 @@ let createBlogs = async function (req, res) {
     //================================== End Validation =========================================//
     
         if (data.isPublished == true) {
-            data.publishedAt = Date.now();
+            data.publishedAt = Date.now();     //getting published date
         }
-
         let result = await blogsModels.create(data);
         res.send({ data: result, status: true })
     }
@@ -72,6 +75,5 @@ let createBlogs = async function (req, res) {
     }
 }
 module.exports.createBlogs = createBlogs
-
 
 
