@@ -107,6 +107,22 @@ let getBlogs = async function (req, res) {
 
             filter["authorId"] = queryValue["author Id"]
         }
+        if (queryValue["category"]) {
+
+            if (typeof queryValue["category"] !== "string" || typeof queryValue["category"] == "undefined") {
+                return res.status(400).send({ msg: "category is required", status: false })
+            }
+
+            filter["category"] = queryValue["category"]
+        }
+        if (queryValue["tags"]) {
+
+            filter["tags"] = [...queryValue["tags"]]
+        }
+        if (queryValue["subscategory"]) {
+
+            filter["subscategory"] = [...queryValue["subscategory"]]
+        }
 
         let data = await blogsModels.find(filter)
 
@@ -114,9 +130,11 @@ let getBlogs = async function (req, res) {
 
             return res.status(404).send({ status: false, msg: "No document found" })
         }
-        res.send({ data: data })
+
+        res.status(200).send({ data: data })
 
     } catch (err) {
+
         res.status(500).send({ status: false, msg: err.message })
     }
 }
@@ -202,63 +220,74 @@ const updateBlogs = async function (req, res) {
 //--------------------------------------------------------------delete-Api----------------------------------------------------------
 
 let delBlogs = async function (req, res) {
+
     try {
+
         if (Object.keys(req.query).length == 0) {
+
             return res.status(400).send({ msg: "Blog details must be present", status: false })
         }
+
         let filter = { isDeleted: false, isPublished: false }
 
         if (req.query["authorId"]) {
+
             if (!mongoose.Types.ObjectId.isValid(req.query["authorId"])) {
+
                 return res.status(400).send({ msg: "authorId is is invalid", status: false })
             }
+
             filter["authorId"] = req.query["authorId"]
         }
+
         if (req.query["category"]) {
+
             filter["category"] = req.query["category"]
         }
+
         if (req.query["tag"]) {
+
             filter["tags"] = req.query["tag"]
         }
         if (req.query["subcategory"]) {
+
             filter["subcategory"] = req.query["subcategory"]
         }
+
         let data = await blogsModels.updateMany(filter, { isDeleted: true },)
 
         if (data.modifiedCount == 0) {
+
             return res.status(404).send({ status: false, msg: "No document found" })
         }
+
         res.status(200).send({ status: true, msg: data });
     }
     catch (error) {
+
         res.status(500).send({ status: false, msg: error.message });
     }
 }
-
-
-
-
 
 
 // ===========================================DELETE BY BLOGS-ID====================================================================
 
 
 const deleteBlogsById = async function (req, res) {
+
     try {
+
         let blogId = req.params.blogId;
         let result = await blogsModels.findOne({ _id: blogId, isDeleted: false });
+
         if (!result) return res.status(404).send({ status: false, msg: "Blog is already deleted" })
-        else {
-            let updated = await blogsModels.findByIdAndUpdate(
-                { _id: blogId, isDeleted: false },
-                { isDeleted: true },
-                { new: true })
 
-            return res.status(200).send({ status: true, data: updated });
-        }
+        let updated = await blogsModels.findByIdAndUpdate({ _id: blogId, isDeleted: false }, { isDeleted: true }, { new: true })
 
+        return res.status(200).send({ status: true, data: updated });
 
     } catch (error) {
+
         res.status(500).send({ status: false, msg: error.message });
     }
 
