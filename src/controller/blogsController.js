@@ -90,8 +90,10 @@ let getBlogs=async function(req,res){
     if(req.query["subcategory"]){
         filter["subcategory"]=req.query["subcategory"]
     }
-
     let data=await blogsModels.find(filter)
+    if(data.length==0){
+        return res.status(404).send({status:false,msg:"No document found"})
+    }
     res.send({data:data})
 }
 
