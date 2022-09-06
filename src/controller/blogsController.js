@@ -117,11 +117,11 @@ let getBlogs = async function (req, res) {
         }
         if (queryValue["tags"]) {
 
-            filter["tags"] = [...queryValue["tags"]]
+            filter["tags"] = queryValue["tags"]
         }
         if (queryValue["subscategory"]) {
 
-            filter["subscategory"] = [...queryValue["subscategory"]]
+            filter["subscategory"] = queryValue["subscategory"]
         }
 
         let data = await blogsModels.find(filter)
