@@ -65,6 +65,7 @@ let createAuthor = async function (req, res) {
 
 let login = async function (req, res) {
     try {
+
         let email = req.body.email;
         let password = req.body.password;
 
@@ -79,7 +80,7 @@ let login = async function (req, res) {
         }, "This is secret key")
 
         res.setHeader("x-auth-token", token);
-        res.status(200).send({ status: true, token,userId:user._id });
+        res.status(200).send({ status: true, generatedToken: token, userId:user._id });
     }
     catch (error) {
         res.status(500).send(error);
