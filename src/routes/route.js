@@ -14,7 +14,7 @@ router.post('/blogs',blogsController.createBlogs)
 
 //=======================================getBlogs================================================
 
-router.get('blogs',blogsController.getBlogs)
+router.get('/blogs',blogsController.getBlogs)
 
 
 
