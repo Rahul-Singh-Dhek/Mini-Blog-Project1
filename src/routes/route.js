@@ -13,18 +13,21 @@ router.post('/authors',authorController.createAuthor)
 
 router.post('/blogs',blogsController.createBlogs)
 
-//=======================================getBlogs================================================
+//=======================================getBlogApi================================================
 
 router.get('/blogs',blogsController.getBlogs)
+
+//=======================================UpdateBlogApi============================================
 
 router.put('/blogs/:blogId',blogsController.updateBlogs)
 
 //=======================================DELETE=================================================
+
 router.delete("/blogs/:blogId",blogsController.deleteBlogsById)
+
 router.delete('/blogs',blogsController.delBlogs)
 
 //=======================================login================================================
-
 
 router.post('/login',authorController.login);
 
