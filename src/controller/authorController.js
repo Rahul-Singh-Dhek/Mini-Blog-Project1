@@ -5,7 +5,6 @@ const authorModels = require("../Models/authorModels");
 let createAuthor = async function (req, res) {
 
     try {
-
         let data = req.body;
 
         //================================= Start Validation ===========================================//
@@ -61,8 +60,6 @@ let createAuthor = async function (req, res) {
         res.send({ msg: err.message, status: false })
     }
 }
-
-
 
 //login author
 

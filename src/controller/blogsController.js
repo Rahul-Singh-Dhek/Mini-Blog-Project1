@@ -142,10 +142,10 @@ let getBlogs = async function (req, res) {
 //-------------------------------------------------------put-Api------------------------------------------------------------------
 
 const updateBlogs = async function (req, res) {
-
+    console.log("I am in")
     try {
 
-        let blogId = req.params.blogId
+        let blogId = req.query.blogId
         let bodyData = req.body
         let updateValue = { isPublished: true, publishedAt: Date.now() }
 
@@ -188,21 +188,21 @@ const updateBlogs = async function (req, res) {
             // updateValue["$set"] = {}
             updateValue["$set"]["body"] = bodyData.body
         }
-        if (bodyData.tags) {
-            if (!Array.isArray(bodyData.tags)) {
-                return res.status(400).send({ msg: "Tags must be Array", status: false })
-            }
+         if (bodyData.tags) {
+        //     if (!Array.isArray(bodyData.tags)) {
+        //         return res.status(400).send({ msg: "Tags must be Array", status: false })
+        //     }
 
-            updateValue["$addToSet"] = {}
-            updateValue["$addToSet"]["tags"] = bodyData.tags
+            updateValue["$push"] = {}
+            updateValue["$push"]["tags"] = bodyData.tags
         }
         if (bodyData.subcategory) {
-            if (!Array.isArray(bodyData.subcategory)) {
-                return res.status(400).send({ msg: "subcategory must be Array", status: false })
-            }
+            // if (!Array.isArray(bodyData.subcategory)) {
+            //     return res.status(400).send({ msg: "subcategory must be Array", status: false })
+            // }
 
             // updateValue["$addToSet"] = {}
-            updateValue["$addToSet"]["subcategory"] = bodyData.subcategory
+            updateValue["$push"]["subcategory"] = bodyData.subcategory
         }
 
         console.log(updateValue)
@@ -210,7 +210,7 @@ const updateBlogs = async function (req, res) {
 
         const updateDocument = await blogsModels.findByIdAndUpdate({ _id: blogId }, updateValue, { new: true })
 
-        res.stauts(200).send({ msg: "blog update successfully", data: updateDocument, status: true })
+        res.status(200).send({ msg: "blog update successfully", data: updateDocument, status: true })
 
     } catch (err) {
         res.status(500).send({ msg: err.message, status: false })

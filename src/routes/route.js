@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authorController=require('../controller/authorController')
-const blogsController=require('../controller/blogsController')
+const blogsController=require('../controller/blogsController.js')
 const middleware=require('../middleware/authorization')
 
 
@@ -17,7 +17,7 @@ router.post('/blogs',blogsController.createBlogs)
 
 router.get('/blogs',blogsController.getBlogs)
 
-router.put('/blogs/:blogId',blogsController.updateBlogs)
+router.put('/blogs',blogsController.updateBlogs)
 
 //=======================================DELETE=================================================
 router.delete("/blogs/:blogId",blogsController.deleteBlogsById)
