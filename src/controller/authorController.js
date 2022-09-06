@@ -34,13 +34,13 @@ let createAuthor = async function (req, res) {
             return res.send({ msg: "EmailId is required", status: false })
         }
         if (!(/^[a-z0-9_]{3,}@[a-z]{3,}.[a-z]{3,6}$/).test(data.email)) {
-            return res.send({ msg: `${data.email} is invalid`, status: false })
+            return res.send({ msg: `Email is invalid`, status: false })
         }
 
         const EmailAreadyExist = await authorModels.findOne({ email: data.email })
 
         if (EmailAreadyExist) {
-            return res.send({ msg: `${data.email} is already Exist`, status: false })
+            return res.send({ msg: `Email already Exists`, status: false })
         }
 
         if (typeof data.password !== "string") {

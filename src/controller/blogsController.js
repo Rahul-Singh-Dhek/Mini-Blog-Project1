@@ -142,10 +142,9 @@ let getBlogs = async function (req, res) {
 //-------------------------------------------------------put-Api------------------------------------------------------------------
 
 const updateBlogs = async function (req, res) {
-    console.log("I am in")
+    console.log("I am in");
     try {
-
-        let blogId = req.query.blogId
+        let blogId = req.params.blogId
         let bodyData = req.body
         let updateValue = { isPublished: true, publishedAt: Date.now() }
 
