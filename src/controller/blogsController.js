@@ -62,8 +62,8 @@ let createBlogs = async function (req, res) {
             }
         }
 
-    //================================== End Validation =========================================//
-    
+        //================================== End Validation =========================================//
+
         if (data.isPublished == true) {
             data.publishedAt = Date.now();     //getting published date
         }
@@ -75,29 +75,54 @@ let createBlogs = async function (req, res) {
     }
 }
 
-let getBlogs=async function(req,res){
+let getBlogs = async function (req, res) {
 
-    let filter={isDeleted:false,isPublished:true}
-    if(req.query["author Id"]){
-        filter["authorId"]=req.query["author Id"]
+    let filter = { isDeleted: false, isPublished: true }
+    if (req.query["author Id"]) {
+        filter["authorId"] = req.query["author Id"]
     }
-    if(req.query["category"]){
-        filter["category"]=req.query["category"]
+    if (req.query["category"]) {
+        filter["category"] = req.query["category"]
     }
-    if(req.query["tag"]){
-        filter["tags"]=req.query["tag"]
+    if (req.query["tag"]) {
+        filter["tags"] = req.query["tag"]
     }
-    if(req.query["subcategory"]){
-        filter["subcategory"]=req.query["subcategory"]
+    if (req.query["subcategory"]) {
+        filter["subcategory"] = req.query["subcategory"]
     }
-    let data=await blogsModels.find(filter)
-    if(data.length==0){
-        return res.status(404).send({status:false,msg:"No document found"})
+    let data = await blogsModels.find(filter)
+    if (data.length == 0) {
+        return res.status(404).send({ status: false, msg: "No document found" })
     }
-    res.send({data:data})
+    res.send({ data: data })
 }
+
+
+// ===========================================DELETE BY BLOGS-ID=============================
+
+
+const deleteBlogsById = async function (req, res) {
+    try {
+        let blogId = req.params.blogId;
+        let result = await blogsModels.findOne({ _id: blogId, isDeleted: false });
+        if (!result) return res.status(404).send({ status: false, msg: "Blog is already deleted" })
+        else {
+            let updated = await blogsModels.findByIdAndUpdate(
+                { _id: blogId, isDeleted: false },
+                { isDeleted: true },
+                { new: true })
+
+            return res.status(200).send({ status: true, data: updated });
+        }
+
+
+    } catch (error) {
+        res.status(500).send({ status: false, msg: error.message });
+    }
+
+};
+
 
 module.exports.createBlogs = createBlogs
 module.exports.getBlogs = getBlogs
-
-
+module.exports.deleteBlogsById = deleteBlogsById

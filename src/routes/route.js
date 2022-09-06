@@ -16,6 +16,9 @@ router.post('/blogs',blogsController.createBlogs)
 
 router.get('blogs',blogsController.getBlogs)
 
+//=======================================DELETE=================================================
+router.delete("/blogs/:blogId",blogsController.deleteBlogsById)
+
 
 
 
