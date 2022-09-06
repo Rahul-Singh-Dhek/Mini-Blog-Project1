@@ -11,11 +11,13 @@ router.post('/authors',authorController.createAuthor)
 
 //======================================blogApi===================================================
 
-router.post('/blogs',middleware.mid1,blogsController.createBlogs)
+router.post('/blogs',blogsController.createBlogs)
 
 //=======================================getBlogs================================================
 
-router.get('blogs',blogsController.getBlogs)
+router.get('/blogs',blogsController.getBlogs)
+
+router.put('/blogs/:blogId',blogsController.updateBlogs)
 
 //=======================================DELETE=================================================
 router.delete("/blogs/:blogId",blogsController.deleteBlogsById)
