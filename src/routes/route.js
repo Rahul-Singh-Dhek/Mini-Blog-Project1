@@ -18,5 +18,7 @@ router.get('/blogs',blogsController.getBlogs)
 
 
 
+router.delete('/blogs',blogsController.delBlogs)
+
 
 module.exports = router;

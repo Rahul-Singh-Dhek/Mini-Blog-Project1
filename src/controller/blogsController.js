@@ -1,5 +1,6 @@
 const blogsModels = require("../Models/blogsModels.js");
 const authorModels = require("../Models/authorModels");
+const mongoose=require('mongoose');
 
 
 // ==========================================CreateBlogs===========================================//
@@ -97,7 +98,39 @@ let getBlogs=async function(req,res){
     res.send({data:data})
 }
 
+let delBlogs=async function(req ,res){
+    
+    if (Object.keys(req.query).length == 0) {
+        return res.send({ msg: "Blog details must be present", status: false })
+    }
+    let filter={isDeleted:false,isPublished:false}
+
+    if(req.query["authorId"]){
+        if (!mongoose.Types.ObjectId.isValid(req.query["authorId"])){
+            return res.send({ msg: "authorId is is invalid", status: false })
+        }
+        filter["authorId"]=req.query["authorId"]
+    }
+    if(req.query["category"]){
+        filter["category"]=req.query["category"]
+    }
+    if(req.query["tag"]){
+        filter["tags"]=req.query["tag"]
+    }
+    if(req.query["subcategory"]){
+        filter["subcategory"]=req.query["subcategory"]
+    }
+    let data=await blogsModels.updateMany(filter,{isDeleted:true},)
+
+    if(data.modifiedCount==0){
+        return res.status(404).send({status:false,msg:"No document found"})
+    }
+    res.send({status:true,msg:data});
+}
+
 module.exports.createBlogs = createBlogs
 module.exports.getBlogs = getBlogs
+module.exports.delBlogs = delBlogs
+
 
 
