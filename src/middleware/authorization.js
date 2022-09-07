@@ -1,7 +1,7 @@
 const blogsModels = require("../Models/blogsModels")
 const jwt = require('jsonwebtoken');
 const { default: mongoose } = require("mongoose");
-const validator = require("validator")
+// const validator = require("validator")
 
 let authentication = async function (req, res, next) {
 
@@ -11,7 +11,7 @@ let authentication = async function (req, res, next) {
     let token = req.headers["x-auth-token"];
     if (!token) return res.status(404).send({ status: false, msg: "token must be present" });
 
-    if(!validator.isJWT(token)) return res.status(400).send({msg : "Token is invalid", status : false})
+    // if(!(validator.isJWT(token))) return res.status(400).send({msg : "Token is invalid", status : false})
 
     let decodedToken = jwt.verify(token, "This is secret key");
 
