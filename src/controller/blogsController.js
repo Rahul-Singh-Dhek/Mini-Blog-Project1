@@ -133,8 +133,8 @@ let getBlogs = async function (req, res) {
 
 const updateBlogs = async function (req, res) {
 
-    console.log("I am in");
     try {
+
         let blogId = req.params.blogId
         let bodyData = req.body
         let updateValue = { "$set":{isPublished: true, publishedAt: Date.now()} }
@@ -184,9 +184,7 @@ const updateBlogs = async function (req, res) {
             }
             updateValue["$push"]["subcategory"] = bodyData.subcategory
         }
-
         console.log(updateValue)
-
 
         const updateDocument = await blogsModels.findByIdAndUpdate({ _id: blogId }, updateValue, { new: true })
 
@@ -203,8 +201,6 @@ let delBlogs = async function (req, res) {
 
     try {
 
-        console.log(req.query)
-
         if (Object.keys(req.query).length == 0) {
 
             return res.status(400).send({ msg: "Blog details must be present", status: false })
@@ -219,7 +215,10 @@ let delBlogs = async function (req, res) {
             }
 
             filter["authorId"] = req.query["authorId"]
+        }else{
+            return res.status(400).send({status:false,msg:"authorId must be present"})
         }
+
 
         if (req.query["category"]) {
 

@@ -65,19 +65,19 @@ let createAuthor = async function (req, res) {
 
 let login = async function (req, res) {
     try {
-
+        
         let email = req.body.email;
         let password = req.body.password;
 
         let user = await authorModels.findOne({ email: email, password: password });
         if (!user) return res.status(401).send({ msg: "Try with another email or password", status: false })
-        // res.send({msg:user,status:true});
 
-        let token = jwt.sign({
+        let token = jwt.sign(
+            {
             userId: user._id.toString(),
             project: "1",
             Title: "Mini Blogging Site"
-        }, "This is secret key")
+            },"This is secret key")
 
         res.setHeader("x-auth-token", token);
         res.status(200).send({ status: true, generatedToken: token });
