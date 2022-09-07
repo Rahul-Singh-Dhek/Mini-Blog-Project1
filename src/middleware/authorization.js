@@ -1,7 +1,8 @@
 
+const blogsModels = require("../Models/blogsModels")
 const jwt = require('jsonwebtoken')
 
-let mid1 = async function (req, res, next) {
+let authentication = async function (req, res, next) {
   //authentication code
   try {
     let token = req.headers["x-auth-token"];
@@ -9,14 +10,10 @@ let mid1 = async function (req, res, next) {
 
     let decodedToken = jwt.verify(token, "This is secret key");
     // console.log(decodedToken)
-    if (!decodedToken)
+    if (!decodedToken) {
       return res.status(404).send({ status: false, msg: "token is invalid" });
-
-
-    //Authorization code
-    let userId1 = decodedToken["userId"];
-    let userId2 = req.body.authorId;
-    if (userId1 != userId2) return res.status(404).send("You don't have access to change or fetch this user's details")
+    }
+    req.decodedToken = decodedToken;
     next();
   }
   catch (error) {
@@ -24,4 +21,30 @@ let mid1 = async function (req, res, next) {
   }
 }
 
-module.exports.mid1 = mid1;
+
+let authorisation = async function (req, res, next) {
+
+  let decodedToken=req.decodedToken
+  let data = req.params.blogId
+  let userId1 = decodedToken["userId"];
+  
+  if(data){
+    let find = await blogsModels.findById(data)
+    if(userId1!==find.authorId) 
+    return res.send("Kuch bhi")
+  }
+  
+  data = req.query.authorId
+  if(userId1 !== data) return res.send("falna falna")
+  next()
+
+
+
+
+}
+
+
+
+
+module.exports.authentication = authentication;
+module.exports.authorisation = authorisation;

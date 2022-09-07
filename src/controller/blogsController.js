@@ -162,14 +162,12 @@ const updateBlogs = async function (req, res) {
         }
 
         if (bodyData.body) {
-
             if (typeof bodyData.body !== "string") {
                 return res.status(400).send({ msg: "body is required", status: false })
             }
             updateValue["$set"]["body"] = bodyData.body
         }
         if (bodyData.tags) {
-
             // if (!Array.isArray(bodyData.tags)) {
             //     return res.status(400).send({ msg: "Tags must be Array", status: false })
             // }
@@ -178,7 +176,6 @@ const updateBlogs = async function (req, res) {
             updateValue["$push"]["tags"] = bodyData.tags
         }
         if (bodyData.subcategory) {
-
             // if (!Array.isArray(bodyData.subcategory)) {
             //     return res.status(400).send({ msg: "subcategory must be Array", status: false })
             // }
@@ -216,7 +213,6 @@ let delBlogs = async function (req, res) {
         let filter = { isDeleted: false, isPublished: false }
 
         if (req.query["authorId"]) {
-
             if (!mongoose.Types.ObjectId.isValid(req.query["authorId"])) {
 
                 return res.status(400).send({ msg: "authorId is is invalid", status: false })
