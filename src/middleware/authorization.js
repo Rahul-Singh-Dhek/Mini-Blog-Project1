@@ -32,14 +32,12 @@ let authorisation = async function (req, res, next) {
     let find = await blogsModels.findById(data)
     if(userId1!==find.authorId) 
     return res.send("Kuch bhi")
+    next()
   }
   
   data = req.query.authorId
   if(userId1 !== data) return res.send("falna falna")
   next()
-
-
-
 
 }
 
