@@ -1,5 +1,6 @@
 const blogsModels = require("../Models/blogsModels")
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const { default: mongoose } = require("mongoose");
 
 let authentication = async function (req, res, next) {
 
@@ -31,13 +32,16 @@ let authorisation = async function (req, res, next) {
     let userId1 = decodedToken["userId"];
 
     if (data) {
-
+      
+      if(!mongoose.Types.ObjectId.isValid(data)) return res.status(400).send({msg : "Id is InValid",status : false})
       let findId = await blogsModels.findById(data)
+      if(!findId) return res.status(404).send({msg : "No user resister" , status : false})
       if (userId1 !== findId.authorId) return res.status(403).send({ msg: "user is not Authorised for this operation", status: false })
       next()
     }
 
     data = req.query.authorId
+    if(!mongoose.Types.ObjectId.isValid(data)) return res.status(400).send({msg : "Id is InValid",status : false})
     if (userId1 !== data) return res.status(403).send({ msg: "user is not Authorised for this operation", status: false })
     next()
 
