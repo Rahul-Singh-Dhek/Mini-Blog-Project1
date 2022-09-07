@@ -85,7 +85,7 @@ let getBlogs = async function (req, res) {
         let filter = { isDeleted: false, isPublished: true }
         let queryValue = req.query
 
-        //======================================= Start Validation===============================================//
+    //======================================= Start Validation===============================================//
 
         if (queryValue["authorId"]) {
 
@@ -121,7 +121,7 @@ let getBlogs = async function (req, res) {
             return res.status(404).send({ status: false, msg: "No document found" })
         }
 
-        return res.status(200).send({ data: data })
+        return res.status(200).send({ data: data , status : true })
 
     } catch (err) {
 
@@ -216,6 +216,7 @@ let delBlogs = async function (req, res) {
 
             filter["authorId"] = req.query["authorId"]
         }else{
+            
             return res.status(400).send({status:false,msg:"authorId must be present"})
         }
 
