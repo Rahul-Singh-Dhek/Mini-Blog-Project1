@@ -87,7 +87,7 @@ let getBlogs = async function (req, res) {
 
         //======================================= Start Validation===============================================//
 
-        if (queryValue["author Id"]) {
+        if (queryValue["authorId"]) {
 
             // if (typeof queryValue["author Id"] !== "string" || typeof queryValue["author Id"] == "undefined") {
             //     return res.status(400).send({ msg: "authorId is required", status: false })
@@ -96,15 +96,15 @@ let getBlogs = async function (req, res) {
             // if (queryValue["author Id"].length == 0) {
             //     return res.status(400).send({ msg: "authorId must be present", status: false })
             // }
-            if (!mongoose.Types.ObjectId.isValid(queryValue["author Id"])) {
+            if (!mongoose.Types.ObjectId.isValid(queryValue["authorId"])) {
                 return res.status(400).send({ msg: "authorId is invalid", status: false })
             }
-            let author = await authorModels.findById(queryValue["author Id"])
+            let author = await authorModels.findById(queryValue["authorId"])
             if (!author) {
                 return res.status(404).send({ msg: "athorId is not from author collection", status: false })
             }
 
-            filter["authorId"] = queryValue["author Id"]
+            filter["authorId"] = queryValue["authorId"]
         }
         if (queryValue["category"]) {
 
@@ -122,6 +122,8 @@ let getBlogs = async function (req, res) {
 
             filter["subcategory"] = queryValue["subcategory"]
         }
+        
+        console.log(filter)
 
         let data = await blogsModels.find(filter)
 
@@ -141,6 +143,8 @@ let getBlogs = async function (req, res) {
 //-------------------------------------------------------put-Api------------------------------------------------------------------
 
 const updateBlogs = async function (req, res) {
+
+    console.log("I am in");
     try {
         let blogId = req.params.blogId
         let bodyData = req.body
@@ -162,38 +166,41 @@ const updateBlogs = async function (req, res) {
             return res.status(400).send({ msg: "User not update anything", data: blogExist, status: true })
         }
         if (bodyData.title) {
-
-            if (typeof bodyData.title !== "string") {
+            if (typeof bodyData.title !== "string") {          
                 return res.status(400).send({ msg: "title is required", status: false })
             }
-            if (bodyData.title.length == 0) {
-                return res.status(400).send({ msg: "Title must be present", status: false })
-            }
+            // if (bodyData.title.length == 0) {
+            //     return res.status(400).send({ msg: "Title must be present", status: false })
+            // }
 
             updateValue["$set"] = {}
             updateValue["$set"]["title"] = bodyData.title
+        }else{
+            return res.send("Title is necessary")
         }
         if (bodyData.body) {
 
             if (typeof bodyData.body !== "string") {
                 return res.status(400).send({ msg: "body is required", status: false })
             }
-            if (bodyData.body.length == 0) {
-                return res.status(400).send({ msg: "body must be present", status: false })
-            }
+            // if (bodyData.body.length == 0) {
+            //     return res.status(400).send({ msg: "body must be present", status: false })
+            // }
 
            
             updateValue["$set"]["body"] = bodyData.body
         }
          if (bodyData.tags) {
-        //     if (!Array.isArray(bodyData.tags)) {
-        //         return res.status(400).send({ msg: "Tags must be Array", status: false })
-        //     }
+
+            // if (!Array.isArray(bodyData.tags)) {
+            //     return res.status(400).send({ msg: "Tags must be Array", status: false })
+            // }
 
             updateValue["$push"] = {}
             updateValue["$push"]["tags"] = bodyData.tags
         }
         if (bodyData.subcategory) {
+
             // if (!Array.isArray(bodyData.subcategory)) {
             //     return res.status(400).send({ msg: "subcategory must be Array", status: false })
             // }
@@ -218,6 +225,8 @@ const updateBlogs = async function (req, res) {
 let delBlogs = async function (req, res) {
 
     try {
+
+        console.log(req.query)
 
         if (Object.keys(req.query).length == 0) {
 
@@ -278,7 +287,7 @@ const deleteBlogsById = async function (req, res) {
 
         let updated = await blogsModels.findByIdAndUpdate({ _id: blogId, isDeleted: false }, { isDeleted: true }, { new: true })
 
-        return res.status(200).send({ status: true, data: updated });
+        return res.status(200).send();
 
     } catch (error) {
 
