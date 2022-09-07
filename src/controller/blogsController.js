@@ -202,7 +202,7 @@ let delBlogs = async function (req, res) {
     try {
 
         if (Object.keys(req.query).length == 0) {
-            
+
             return res.status(400).send({ msg: "Blog details must be present", status: false })
         }
 
@@ -215,7 +215,10 @@ let delBlogs = async function (req, res) {
             }
 
             filter["authorId"] = req.query["authorId"]
+        }else{
+            return res.status(400).send({status:false,msg:"authorId must be present"})
         }
+
 
         if (req.query["category"]) {
 
