@@ -89,18 +89,17 @@ let getBlogs = async function (req, res) {
 
         if (queryValue["author Id"]) {
 
-            if (typeof queryValue["author Id"] !== "string" || typeof queryValue["author Id"] == "undefined") {
-                return res.status(400).send({ msg: "authorId is required", status: false })
-            }
-            if (queryValue["author Id"].length == 0) {
-                return res.status(400).send({ msg: "authorId must be present", status: false })
-            }
+            // if (typeof queryValue["author Id"] !== "string" || typeof queryValue["author Id"] == "undefined") {
+            //     return res.status(400).send({ msg: "authorId is required", status: false })
+            // }
+            // console.log("myname")
+            // if (queryValue["author Id"].length == 0) {
+            //     return res.status(400).send({ msg: "authorId must be present", status: false })
+            // }
             if (!mongoose.Types.ObjectId.isValid(queryValue["author Id"])) {
-                return res.status(400).send({ msg: "authorId is is invalid", status: false })
+                return res.status(400).send({ msg: "authorId is invalid", status: false })
             }
-
             let author = await authorModels.findById(queryValue["author Id"])
-
             if (!author) {
                 return res.status(404).send({ msg: "athorId is not from author collection", status: false })
             }
@@ -109,9 +108,9 @@ let getBlogs = async function (req, res) {
         }
         if (queryValue["category"]) {
 
-            if (typeof queryValue["category"] !== "string" || typeof queryValue["category"] == "undefined") {
-                return res.status(400).send({ msg: "category is required", status: false })
-            }
+            // if (typeof queryValue["category"] !== "string" || typeof queryValue["category"] == "undefined") {
+            //     return res.status(400).send({ msg: "category is required", status: false })
+            // }
 
             filter["category"] = queryValue["category"]
         }
@@ -119,9 +118,9 @@ let getBlogs = async function (req, res) {
 
             filter["tags"] = queryValue["tags"]
         }
-        if (queryValue["subscategory"]) {
+        if (queryValue["subcategory"]) {
 
-            filter["subscategory"] = queryValue["subscategory"]
+            filter["subcategory"] = queryValue["subcategory"]
         }
 
         let data = await blogsModels.find(filter)
@@ -142,7 +141,6 @@ let getBlogs = async function (req, res) {
 //-------------------------------------------------------put-Api------------------------------------------------------------------
 
 const updateBlogs = async function (req, res) {
-    console.log("I am in");
     try {
         let blogId = req.params.blogId
         let bodyData = req.body
@@ -184,7 +182,7 @@ const updateBlogs = async function (req, res) {
                 return res.status(400).send({ msg: "body must be present", status: false })
             }
 
-            // updateValue["$set"] = {}
+           
             updateValue["$set"]["body"] = bodyData.body
         }
          if (bodyData.tags) {
@@ -200,7 +198,6 @@ const updateBlogs = async function (req, res) {
             //     return res.status(400).send({ msg: "subcategory must be Array", status: false })
             // }
 
-            // updateValue["$addToSet"] = {}
             updateValue["$push"]["subcategory"] = bodyData.subcategory
         }
 
@@ -268,9 +265,7 @@ let delBlogs = async function (req, res) {
     }
 }
 
-
 // ===========================================DELETE BY BLOGS-ID====================================================================
-
 
 const deleteBlogsById = async function (req, res) {
 
