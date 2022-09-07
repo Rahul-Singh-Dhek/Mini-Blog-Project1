@@ -69,7 +69,7 @@ let createBlogs = async function (req, res) {
             data.publishedAt = Date.now();     //getting published date
         }
         let result = await blogsModels.create(data);
-        res.status(201).send({ data: result, status: true })
+        return res.status(201).send({ data: result, status: true })
     }
     catch (error) {
         res.status(500).send({ status: false, msg: error.message })
@@ -112,7 +112,7 @@ let getBlogs = async function (req, res) {
             filter["subcategory"] = queryValue["subcategory"]
         }
 
-        console.log(filter)
+        // console.log(filter)
 
         let data = await blogsModels.find(filter)
 
@@ -121,11 +121,11 @@ let getBlogs = async function (req, res) {
             return res.status(404).send({ status: false, msg: "No document found" })
         }
 
-        res.status(200).send({ data: data })
+        return res.status(200).send({ data: data })
 
     } catch (err) {
 
-        res.status(500).send({ status: false, msg: err.message })
+        return res.status(500).send({ status: false, msg: err.message })
     }
 }
 

@@ -1,7 +1,6 @@
 const blogsModels = require("../Models/blogsModels")
 const jwt = require('jsonwebtoken');
 const { default: mongoose } = require("mongoose");
-// const validator = require("validator")
 
 let authentication = async function (req, res, next) {
 
@@ -11,18 +10,18 @@ let authentication = async function (req, res, next) {
     let token = req.headers["x-auth-token"];
     if (!token) return res.status(404).send({ status: false, msg: "token must be present" });
 
-    // if(!(validator.isJWT(token))) return res.status(400).send({msg : "Token is invalid", status : false})
-
-    let decodedToken = jwt.verify(token, "This is secret key");
-
-    if (!decodedToken) {
-      return res.status(404).send({ status: false, msg: "token is invalid" });
-    }
-    req.decodedToken = decodedToken;
-    next();
+    let decodedToken= jwt.verify(token, "This is secret key",(error)=>{
+      if(error){
+        let message=error.message=="jwt expired"?"token is expired ,please login again":"token is invalid,please recheck your token"
+        return res.status(400).send(message)
+      }
+      req.decodedToken = decodedToken;
+       next();
+     });
+    
   }
   catch (error) {
-    res.status(500).send(error.message);
+    return res.status(500).send(error.message);
   }
 }
 
@@ -49,7 +48,7 @@ let authorisation = async function (req, res, next) {
     next()
 
   } catch (err) {
-    res.status(500).send({ msg: err.message, status: false })
+    return res.status(500).send({ msg: err.message, status: false })
   }
 }
 
