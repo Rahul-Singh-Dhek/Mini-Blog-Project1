@@ -137,7 +137,7 @@ const updateBlogs = async function (req, res) {
     try {
         let blogId = req.params.blogId
         let bodyData = req.body
-        let updateValue = { isPublished: true, publishedAt: Date.now() }
+        let updateValue = { "$set":{isPublished: true, publishedAt: Date.now()} }
 
         //======================================= Start Validation===============================================//
 
@@ -158,8 +158,6 @@ const updateBlogs = async function (req, res) {
             if (typeof bodyData.title !== "string") {
                 return res.status(400).send({ msg: "title is required", status: false })
             }
-
-            updateValue["$set"] = {}
             updateValue["$set"]["title"] = bodyData.title
         }
 
@@ -167,9 +165,6 @@ const updateBlogs = async function (req, res) {
 
             if (typeof bodyData.body !== "string") {
                 return res.status(400).send({ msg: "body is required", status: false })
-            }
-            if (!updateValue["$set"]) {
-                updateValue["$set"] = {}
             }
             updateValue["$set"]["body"] = bodyData.body
         }
