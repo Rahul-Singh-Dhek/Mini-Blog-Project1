@@ -10,12 +10,13 @@ let authentication = async function (req, res, next) {
     let token = req.headers["x-auth-token"];
     if (!token) return res.status(404).send({ status: false, msg: "token must be present" });
 
-    let decodedToken= jwt.verify(token, "This is secret key",(error)=>{
+    jwt.verify(token, "This is secret key",(error,decodedToken)=>{
       if(error){
-        let message=error.message=="jwt expired"?"token is expired ,please login again":"token is invalid,please recheck your token"
-        return res.status(400).send(message)
+        let message=(error.message=="jwt expired"?"token is expired ,please login again":"token is invalid,please recheck your token")
+        return res.status(400).send({status:false,msg:message})
       }
-      req.decodedToken = decodedToken;
+      // console.log(decodedToken)
+       req.decodedToken=decodedToken;
        next();
      });
     
