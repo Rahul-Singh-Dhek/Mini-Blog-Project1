@@ -17,7 +17,6 @@ let mid1 = async function (req, res, next) {
     let userId1 = decodedToken["userId"];
     let userId2 = req.body.authorId;
     if (userId1 != userId2) return res.status(404).send("You don't have access to change or fetch this user's details")
-
     next();
   }
   catch (error) {

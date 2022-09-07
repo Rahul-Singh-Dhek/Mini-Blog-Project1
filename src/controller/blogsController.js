@@ -89,13 +89,6 @@ let getBlogs = async function (req, res) {
 
         if (queryValue["authorId"]) {
 
-            // if (typeof queryValue["author Id"] !== "string" || typeof queryValue["author Id"] == "undefined") {
-            //     return res.status(400).send({ msg: "authorId is required", status: false })
-            // }
-            // console.log("myname")
-            // if (queryValue["author Id"].length == 0) {
-            //     return res.status(400).send({ msg: "authorId must be present", status: false })
-            // }
             if (!mongoose.Types.ObjectId.isValid(queryValue["authorId"])) {
                 return res.status(400).send({ msg: "authorId is invalid", status: false })
             }
@@ -108,10 +101,6 @@ let getBlogs = async function (req, res) {
         }
         if (queryValue["category"]) {
 
-            // if (typeof queryValue["category"] !== "string" || typeof queryValue["category"] == "undefined") {
-            //     return res.status(400).send({ msg: "category is required", status: false })
-            // }
-
             filter["category"] = queryValue["category"]
         }
         if (queryValue["tags"]) {
@@ -122,7 +111,7 @@ let getBlogs = async function (req, res) {
 
             filter["subcategory"] = queryValue["subcategory"]
         }
-        
+
         console.log(filter)
 
         let data = await blogsModels.find(filter)
@@ -166,31 +155,25 @@ const updateBlogs = async function (req, res) {
             return res.status(400).send({ msg: "User not update anything", data: blogExist, status: true })
         }
         if (bodyData.title) {
-            if (typeof bodyData.title !== "string") {          
+            if (typeof bodyData.title !== "string") {
                 return res.status(400).send({ msg: "title is required", status: false })
             }
-            // if (bodyData.title.length == 0) {
-            //     return res.status(400).send({ msg: "Title must be present", status: false })
-            // }
 
             updateValue["$set"] = {}
             updateValue["$set"]["title"] = bodyData.title
-        }else{
-            return res.send("Title is necessary")
         }
+
         if (bodyData.body) {
 
             if (typeof bodyData.body !== "string") {
                 return res.status(400).send({ msg: "body is required", status: false })
             }
-            // if (bodyData.body.length == 0) {
-            //     return res.status(400).send({ msg: "body must be present", status: false })
-            // }
-
-           
+            if (!updateValue["$set"]) {
+                updateValue["$set"] = {}
+            }
             updateValue["$set"]["body"] = bodyData.body
         }
-         if (bodyData.tags) {
+        if (bodyData.tags) {
 
             // if (!Array.isArray(bodyData.tags)) {
             //     return res.status(400).send({ msg: "Tags must be Array", status: false })
@@ -204,7 +187,9 @@ const updateBlogs = async function (req, res) {
             // if (!Array.isArray(bodyData.subcategory)) {
             //     return res.status(400).send({ msg: "subcategory must be Array", status: false })
             // }
-
+            if (!updateValue["$push"]) {
+                updateValue["$push"] = {}
+            }
             updateValue["$push"]["subcategory"] = bodyData.subcategory
         }
 
