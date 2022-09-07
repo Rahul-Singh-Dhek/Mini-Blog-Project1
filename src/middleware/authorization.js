@@ -31,23 +31,27 @@ let authorisation = async function (req, res, next) {
   try {
 
     let decodedToken = req.decodedToken
-    let data = req.params.blogId
+    console.log(decodedToken)
+    let ID = req.params.blogId
     let userId1 = decodedToken["userId"];
 
-    if (data) {
+    if (ID) {
       
-      if(!mongoose.Types.ObjectId.isValid(data)) return res.status(400).send({msg : "Id is InValid",status : false})
-      let findId = await blogsModels.findById(data)
+      if(!mongoose.Types.ObjectId.isValid(ID)) return res.status(400).send({msg : "blogId is InValid",status : false})
+      let findId = await blogsModels.findById(ID)
       if(!findId) return res.status(404).send({msg : "No user resister" , status : false})
-      if (userId1 !== findId.authorId) return res.status(403).send({ msg: "user is not Authorised for this operation", status: false })
-      next()
+      if (userId1 !== findId.authorId.toString()) return res.status(403).send({ msg: "user is not Authorised for this operation", status: false })
+      next() 
+    }else{
+    ID = req.query.authorId
+    if(!mongoose.Types.ObjectId.isValid(ID)) return res.status(400).send({msg : "authorId is InValid",status : false})
+    if((userId1 !== ID)){
+       return res.status(403).send({ msg: "user is not Authorised for this operation", status: false })
     }
-
-    data = req.query.authorId
-    if(!mongoose.Types.ObjectId.isValid(data)) return res.status(400).send({msg : "Id is InValid",status : false})
-    if (userId1 !== data) return res.status(403).send({ msg: "user is not Authorised for this operation", status: false })
     next()
+  }
 
+ 
   } catch (err) {
     return res.status(500).send({ msg: err.message, status: false })
   }

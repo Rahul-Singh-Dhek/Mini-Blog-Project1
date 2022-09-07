@@ -83,7 +83,7 @@ let login = async function (req, res) {
        return  res.status(200).send({ status: true, generatedToken: token });
     }
     catch (error) {
-        return res.status(500).send(error);
+        return res.status(500).send({msg:error.message,status:false});
     }
 }
 

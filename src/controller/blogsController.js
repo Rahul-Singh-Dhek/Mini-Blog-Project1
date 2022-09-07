@@ -188,10 +188,10 @@ const updateBlogs = async function (req, res) {
 
         const updateDocument = await blogsModels.findByIdAndUpdate({ _id: blogId }, updateValue, { new: true })
 
-        res.status(200).send({ msg: "blog update successfully", data: updateDocument, status: true })
+       return res.status(200).send({ msg: "blog update successfully", data: updateDocument, status: true })
 
     } catch (err) {
-        res.status(500).send({ msg: err.message, status: false })
+        return res.status(500).send({ msg: err.message, status: false })
     }
 }
 
