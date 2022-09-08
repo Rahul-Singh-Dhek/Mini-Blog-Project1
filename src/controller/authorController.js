@@ -95,7 +95,7 @@ let login = async function (req, res) {
         }
 
         let user = await authorModels.findOne({ email: email, password: password });
-        if (!user) return res.status(401).send({ msg: "Try with another email or password", status: false })
+        if (!user) return res.status(404).send({ msg: "Try with another email or password", status: false })
 
         let token = jwt.sign(
             {
