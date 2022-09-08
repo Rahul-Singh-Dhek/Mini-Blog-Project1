@@ -39,11 +39,14 @@ let authorisation = async function (req, res, next) {
 
       if (!mongoose.Types.ObjectId.isValid(ID)) return res.status(400).send({ msg: "blogId is InValid", status: false })
       let findId = await blogsModels.findById(ID)
-      if (!findId) return res.status(404).send({ msg: "No user resister", status: false })
+      if (!findId) return res.status(400).send({ msg: "No user resister", status: false })
       if (userId1 !== findId.authorId.toString()) return res.status(403).send({ msg: "user is not Authorised for this operation", status: false })
       next()
     } else {
       ID = req.query.authorId
+      if(!ID){
+        return res.status(400).send({ msg: "authorId is required", status: false })
+      }
       if (!mongoose.Types.ObjectId.isValid(ID)) return res.status(400).send({ msg: "authorId is InValid", status: false })
       if ((userId1 !== ID)) {
         return res.status(403).send({ msg: "user is not Authorised for this operation", status: false })

@@ -12,14 +12,20 @@ let createAuthor = async function (req, res) {
         if (Object.keys(data).length == 0) {
             return res.status(400).send({ msg: "Please Provide AuthorDetail", status: false })
         }
-        if (typeof data.fname !== "string") {
-            return res.status(400).send({ msg: "fname is required", status: false })
+        if(!data.fname){
+            return res.status(400).send({ msg: "fname must be in present ", status: false })
         }
-        if(!/^[a-zA-Z]$/.test(data.fname)){
-            return res.status(400).send({msg : "first name should contain letter only",status: false})
+        if (typeof data.fname !== "string") {
+            return res.status(400).send({ msg: "fname must be in String ", status: false })
+        }
+        if(!(/^[a-z]+$/i.test(data.fname))){
+            return res.status(400).send({msg : "first name should contain letter only111",status: false})
         }
         if (data.fname.length < 2 || data.fname.length > 100) {
             return res.status(400).send({ msg: "fname should be min 2 and max 100 character", status: false })
+        }
+        if(!data.lname){
+            return res.status(400).send({ msg: "lname must be in present ", status: false })
         }
         if (typeof data.lname !== "string") {
             return res.status(400).send({ msg: "lname is required", status: false })
@@ -27,7 +33,7 @@ let createAuthor = async function (req, res) {
         if (data.lname.length < 2 || data.lname.length > 100) {
             return res.status(400).send({ msg: "lname should be min 2 and max 100 character", status: false })
         }
-        if(!/^[a-zA-Z]$/.test(data.lname)){
+        if(!/^[a-z]+$/i.test(data.lname)){
             return res.status(400).send({msg : "last name should contain letter only",status: false})
         }
         if (typeof data.title !== "string") {
@@ -75,6 +81,12 @@ let login = async function (req, res) {
         let email = req.body.email;
         let password = req.body.password;
 
+        if(!email){
+            return res.status(400).send({ msg: `Email is required`, status: false })
+        }
+        if(!password){
+            return res.status(400).send({ msg: `Password is required`, status: false })
+        }
         if (!(/^[a-z0-9_]{3,}@[a-z]{3,}.[a-z]{3,6}$/).test(email)) {
             return res.status(400).send({ msg: `Email is invalid`, status: false })
         }

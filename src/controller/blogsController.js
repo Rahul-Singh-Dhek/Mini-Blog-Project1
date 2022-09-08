@@ -17,24 +17,26 @@ let createBlogs = async function (req, res) {
         if (Object.keys(data).length == 0) {
             return res.status(400).send({ msg: "Blog details is must be present", status: false })
         }
-        if (typeof data.title !== "string") {
-            return res.status(400).send({ msg: "title is required", status: false })
-        }
-        if (data.title.length == 0) {
+        if (!data.title) {
             return res.status(400).send({ msg: "Title must be present", status: false })
+        }
+        if (typeof data.title !== "string") {
+            return res.status(400).send({ msg: "title name must be in String", status: false })
+        }
+        if (!data.body) {
+            return res.status(400).send({ msg: "body must be present", status: false })
         }
         if (typeof data.body !== "string") {
             return res.status(400).send({ msg: "body is required", status: false })
         }
-        if (data.body.length == 0) {
-            return res.status(400).send({ msg: "body must be present", status: false })
+        if (!data.authorId) {
+            return res.status(400).send({ msg: "authorId must be present", status: false })
         }
+        
         if (typeof data.authorId !== "string") {
             return res.status(400).send({ msg: "authorId is required", status: false })
         }
-        if (data.authorId.length == 0) {
-            return res.status(400).send({ msg: "authorId must be present", status: false })
-        }
+        
         if (!mongoose.Types.ObjectId.isValid(data.authorId)) {
             return res.status(400).send({ msg: "authorId is is invalid", status: false })
         }
@@ -44,12 +46,13 @@ let createBlogs = async function (req, res) {
         if (!author) {
             return res.status(400).send({ msg: "athorId is not from author collection", status: false })
         }
-        if (typeof data.category !== "string") {
-            return res.status(400).send({ msg: "category is required", status: false })
-        }
-        if (data.category.length == 0) {
+        if (!data.category) {
             return res.status(400).send({ msg: "category must be present", status: false })
         }
+        if (typeof data.category !== "string") { 
+            return res.status(400).send({ msg: "category is required", status: false })
+        }
+        
         if (data.tags) {
 
             if (!Array.isArray(data.tags)) {
@@ -112,7 +115,7 @@ let getBlogs = async function (req, res) {
             filter["subcategory"] = queryValue["subcategory"]
         }
 
-        // console.log(filter)
+        console.log(filter)
 
         let data = await blogsModels.find(filter)
 
@@ -156,14 +159,14 @@ const updateBlogs = async function (req, res) {
         }
         if (bodyData.title) {
             if (typeof bodyData.title !== "string") {
-                return res.status(400).send({ msg: "title is required", status: false })
+                return res.status(400).send({ msg: "title must be in String", status: false })
             }
             updateValue["$set"]["title"] = bodyData.title
         }
 
         if (bodyData.body) {
             if (typeof bodyData.body !== "string") {
-                return res.status(400).send({ msg: "body is required", status: false })
+                return res.status(400).send({ msg: "body is must be in String", status: false })
             }
             updateValue["$set"]["body"] = bodyData.body
         }
@@ -201,11 +204,6 @@ let delBlogs = async function (req, res) {
 
     try {
 
-        if (Object.keys(req.query).length == 0) {
-
-            return res.status(400).send({ msg: "Blog details must be present", status: false })
-        }
-
         let filter = { isDeleted: false, isPublished: false }
 
         if (req.query["authorId"]) {
@@ -226,9 +224,9 @@ let delBlogs = async function (req, res) {
             filter["category"] = req.query["category"]
         }
 
-        if (req.query["tag"]) {
+        if (req.query["tags"]) {
 
-            filter["tags"] = req.query["tag"]
+            filter["tags"] = req.query["tags"]
         }
         if (req.query["subcategory"]) {
 
