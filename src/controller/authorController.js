@@ -10,44 +10,50 @@ let createAuthor = async function (req, res) {
         //================================= Start Validation ===========================================//
 
         if (Object.keys(data).length == 0) {
-            return res.send({ msg: "Please Provide AuthorDetail", status: false })
+            return res.status(400).send({ msg: "Please Provide AuthorDetail", status: false })
         }
         if (typeof data.fname !== "string") {
-            return res.send({ msg: "fname is required", status: false })
+            return res.status(400).send({ msg: "fname is required", status: false })
+        }
+        if(!/^[a-zA-Z]$/.test(data.fname)){
+            return res.status(400).send({msg : "first name should contain letter only",status: false})
         }
         if (data.fname.length < 2 || data.fname.length > 100) {
-            return res.send({ msg: "fname should be min 2 and max 100 character", status: false })
+            return res.status(400).send({ msg: "fname should be min 2 and max 100 character", status: false })
         }
         if (typeof data.lname !== "string") {
-            return res.send({ msg: "lname is required", status: false })
+            return res.status(400).send({ msg: "lname is required", status: false })
         }
         if (data.lname.length < 2 || data.lname.length > 100) {
-            return res.send({ msg: "lname should be min 2 and max 100 character", status: false })
+            return res.status(400).send({ msg: "lname should be min 2 and max 100 character", status: false })
+        }
+        if(!/^[a-zA-Z]$/.test(data.lname)){
+            return res.status(400).send({msg : "last name should contain letter only",status: false})
         }
         if (typeof data.title !== "string") {
-            return res.send({ msg: "Title is required", status: false })
+            return res.status(400).send({ msg: "Title is required", status: false })
         }
         if (["Mr", "Mrs", "Miss"].indexOf(data.title) == -1) {
-            return res.send({ msg: "Title should be among Mr, Mrs, Miss", status: false })
+            return res.status(400).send({ msg: "Title should be among Mr, Mrs, Miss", status: false })
         }
         if (typeof data.email !== "string") {
-            return res.send({ msg: "EmailId is required", status: false })
+            return res.status(400).send({ msg: "EmailId is required", status: false })
         }
         if (!(/^[a-z0-9_]{3,}@[a-z]{3,}.[a-z]{3,6}$/).test(data.email)) {
-            return res.send({ msg: `Email is invalid`, status: false })
+            return res.status(400).send({ msg: `Email is invalid`, status: false })
         }
 
         const EmailAreadyExist = await authorModels.findOne({ email: data.email })
 
         if (EmailAreadyExist) {
-            return res.send({ msg: `Email already Exists`, status: false })
+            return res.status(400).send({ msg: `Email already Exists`, status: false })
         }
 
         if (typeof data.password !== "string") {
-            return res.send({ msg: "Password is required", status: false })
+            return res.status(400).send({ msg: "Password is required", status: false })
         }
         if (!/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&])[a-zA-Z0-9@#$%&]{8,20}$/.test(data.password)) {
-            return res.send({ msg: "Password should be min 8 ans max 20 character.It containt atleast--> 1 Uppercase letter, 1 Lowercase letter, 1 Number, 1 Special character" })
+            return res.status(400).send({ msg: "Password should be min 8 ans max 20 character.It containt atleast--> 1 Uppercase letter, 1 Lowercase letter, 1 Number, 1 Special character" })
         }
 
         //============================================ End Validation =======================================================//
@@ -57,7 +63,7 @@ let createAuthor = async function (req, res) {
         res.status(201).send({ data: createdData, status: true })
 
     } catch (err) {
-        res.send({ msg: err.message, status: false })
+        res.status(500).send({ msg: err.message, status: false })
     }
 }
 
@@ -69,6 +75,13 @@ let login = async function (req, res) {
         let email = req.body.email;
         let password = req.body.password;
 
+        if (!(/^[a-z0-9_]{3,}@[a-z]{3,}.[a-z]{3,6}$/).test(email)) {
+            return res.status(400).send({ msg: `Email is invalid`, status: false })
+        }
+        if (!/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&])[a-zA-Z0-9@#$%&]{8,20}$/.test(password)) {
+            return res.status(400).send({ msg: "Password is invalid", status : false})
+        }
+
         let user = await authorModels.findOne({ email: email, password: password });
         if (!user) return res.status(401).send({ msg: "Try with another email or password", status: false })
 
@@ -79,8 +92,8 @@ let login = async function (req, res) {
                 Title: "Mini Blogging Site"
             }, "This is secret key")
 
-        res.setHeader("x-auth-token", token);
-        return res.status(200).send({ status: true, generatedToken: token });
+         res.setHeader("x-auth-token", token);
+       return res.status(200).send({ status: true, generatedToken: token });
     }
     catch (error) {
         return res.status(500).send({ msg: error.message, status: false });
