@@ -42,7 +42,7 @@ let createBlogs = async function (req, res) {
         let author = await authorModels.findById(data.authorId)
 
         if (!author) {
-            return res.status(404).send({ msg: "athorId is not from author collection", status: false })
+            return res.status(400).send({ msg: "athorId is not from author collection", status: false })
         }
         if (typeof data.category !== "string") {
             return res.status(400).send({ msg: "category is required", status: false })
@@ -94,7 +94,7 @@ let getBlogs = async function (req, res) {
             }
             let author = await authorModels.findById(queryValue["authorId"])
             if (!author) {
-                return res.status(404).send({ msg: "athorId is not from author collection", status: false })
+                return res.status(400).send({ msg: "athorId is not from author collection", status: false })
             }
 
             filter["authorId"] = queryValue["authorId"]
@@ -257,6 +257,11 @@ const deleteBlogsById = async function (req, res) {
     try {
 
         let blogId = req.params.blogId;
+
+        if (!mongoose.Types.ObjectId.isValid(blogId)) {
+            return res.status(400).send({ msg: `${blogId} is invalid`, status: false })
+        }
+        
         let result = await blogsModels.findOne({ _id: blogId, isDeleted: false });
 
         if (!result) return res.status(404).send({ status: false, msg: "Blog is already deleted" })

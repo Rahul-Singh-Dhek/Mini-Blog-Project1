@@ -15,6 +15,9 @@ let createAuthor = async function (req, res) {
         if (typeof data.fname !== "string") {
             return res.status(400).send({ msg: "fname is required", status: false })
         }
+        if(!/^[a-zA-Z]$/.test(data.fname)){
+            return res.status(400).send({msg : "first name should contain letter only",status: false})
+        }
         if (data.fname.length < 2 || data.fname.length > 100) {
             return res.status(400).send({ msg: "fname should be min 2 and max 100 character", status: false })
         }
@@ -23,6 +26,9 @@ let createAuthor = async function (req, res) {
         }
         if (data.lname.length < 2 || data.lname.length > 100) {
             return res.status(400).send({ msg: "lname should be min 2 and max 100 character", status: false })
+        }
+        if(!/^[a-zA-Z]$/.test(data.lname)){
+            return res.status(400).send({msg : "last name should contain letter only",status: false})
         }
         if (typeof data.title !== "string") {
             return res.status(400).send({ msg: "Title is required", status: false })
@@ -69,6 +75,13 @@ let login = async function (req, res) {
         let email = req.body.email;
         let password = req.body.password;
 
+        if (!(/^[a-z0-9_]{3,}@[a-z]{3,}.[a-z]{3,6}$/).test(email)) {
+            return res.status(400).send({ msg: `Email is invalid`, status: false })
+        }
+        if (!/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&])[a-zA-Z0-9@#$%&]{8,20}$/.test(password)) {
+            return res.status(400).send({ msg: "Password is invalid", status : false})
+        }
+
         let user = await authorModels.findOne({ email: email, password: password });
         if (!user) return res.status(401).send({ msg: "Try with another email or password", status: false })
 
@@ -80,7 +93,7 @@ let login = async function (req, res) {
             },"This is secret key")
 
          res.setHeader("x-auth-token", token);
-       return  res.status(200).send({ status: true, generatedToken: token });
+       return res.status(200).send({ status: true, generatedToken: token });
     }
     catch (error) {
         return res.status(500).send({msg:error.message,status:false});
