@@ -44,7 +44,7 @@ let createBlogs = async function (req, res) {
         let author = await authorModels.findById(data.authorId)
 
         if (!author) {
-            return res.status(400).send({ msg: "athorId is not from author collection", status: false })
+            return res.status(404).send({ msg: "athorId is not from author collection", status: false })
         }
         if (!data.category) {
             return res.status(400).send({ msg: "category must be present", status: false })
@@ -97,7 +97,7 @@ let getBlogs = async function (req, res) {
             }
             let author = await authorModels.findById(queryValue["authorId"])
             if (!author) {
-                return res.status(400).send({ msg: "athorId is not from author collection", status: false })
+                return res.status(404).send({ msg: "athorId is not from author collection", status: false })
             }
 
             filter["authorId"] = queryValue["authorId"]
@@ -151,7 +151,7 @@ const updateBlogs = async function (req, res) {
         const blogExist = await blogsModels.findOne({ _id: blogId, isDeleted: false })
 
         if (!blogExist) {
-            return res.status(400).send({ msg: "No document exist", status: false })
+            return res.status(404).send({ msg: "No document exist", status: false })
         }
 
         if (Object.keys(bodyData).length == 0) {
