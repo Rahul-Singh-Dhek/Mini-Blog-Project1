@@ -13,7 +13,7 @@ let authentication = async function (req, res, next) {
     jwt.verify(token, "This is secret key", (error, decodedToken) => {
       if (error) {
         let message = (error.message == "jwt expired" ? "token is expired ,please login again" : "token is invalid,please recheck your token")
-        return res.status(401).send({ status: false, msg: message })
+        return res.status(400).send({ status: false, msg: message })
       }
       // console.log(decodedToken)
       req.decodedToken = decodedToken;
@@ -22,7 +22,7 @@ let authentication = async function (req, res, next) {
 
   }
   catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).send({status:false,msg:error.message});
   }
 }
 
@@ -40,7 +40,7 @@ let authorisation = async function (req, res, next) {
       if (!mongoose.Types.ObjectId.isValid(ID)) return res.status(400).send({ msg: "blogId is InValid", status: false })
       let findId = await blogsModels.findById(ID)
       if (!findId) return res.status(400).send({ msg: "No user resister", status: false })
-      if (userId1 !== findId.authorId.toString()) return res.status(403).send({ msg: "user is not Authorised for this operation", status: false })
+      if (userId1 !== findId.authorId.toString()) return res.status(401).send({ msg: "user is not Authorised for this operation", status: false })
       next()
     } else {
       ID = req.query.authorId
@@ -49,7 +49,7 @@ let authorisation = async function (req, res, next) {
       }
       if (!mongoose.Types.ObjectId.isValid(ID)) return res.status(400).send({ msg: "authorId is InValid", status: false })
       if ((userId1 !== ID)) {
-        return res.status(403).send({ msg: "user is not Authorised for this operation", status: false })
+        return res.status(401).send({ msg: "user is not Authorised for this operation", status: false })
       }
       next()
     }

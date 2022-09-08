@@ -115,7 +115,7 @@ let getBlogs = async function (req, res) {
             filter["subcategory"] = queryValue["subcategory"]
         }
 
-        console.log(filter)
+        // console.log(filter)
 
         let data = await blogsModels.find(filter)
 
@@ -233,7 +233,7 @@ let delBlogs = async function (req, res) {
             filter["subcategory"] = req.query["subcategory"]
         }
 
-        let data = await blogsModels.updateMany(filter, { isDeleted: true },)
+        let data = await blogsModels.updateMany(filter, { isDeleted: true ,deletedAt: Date.now()},)
 
         if (data.modifiedCount == 0) {
 
@@ -264,7 +264,7 @@ const deleteBlogsById = async function (req, res) {
 
         if (!result) return res.status(404).send({ status: false, msg: "Blog is already deleted" })
 
-        let updated = await blogsModels.findByIdAndUpdate({ _id: blogId, isDeleted: false }, { isDeleted: true }, { new: true })
+        let updated = await blogsModels.findByIdAndUpdate({ _id: blogId, isDeleted: false }, { isDeleted: true ,deletedAt:Date.now()}, { new: true })
 
         return res.status(200).send();
 
