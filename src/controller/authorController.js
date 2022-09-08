@@ -65,7 +65,7 @@ let createAuthor = async function (req, res) {
 
 let login = async function (req, res) {
     try {
-        
+
         let email = req.body.email;
         let password = req.body.password;
 
@@ -74,16 +74,16 @@ let login = async function (req, res) {
 
         let token = jwt.sign(
             {
-            userId: user._id.toString(),
-            project: "1",
-            Title: "Mini Blogging Site"
-            },"This is secret key")
+                userId: user._id.toString(),
+                project: "1",
+                Title: "Mini Blogging Site"
+            }, "This is secret key")
 
-         res.setHeader("x-auth-token", token);
-       return  res.status(200).send({ status: true, generatedToken: token });
+        res.setHeader("x-auth-token", token);
+        return res.status(200).send({ status: true, generatedToken: token });
     }
     catch (error) {
-        return res.status(500).send({msg:error.message,status:false});
+        return res.status(500).send({ msg: error.message, status: false });
     }
 }
 

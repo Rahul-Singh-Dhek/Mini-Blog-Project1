@@ -17,7 +17,7 @@ let authentication = async function (req, res, next) {
       }
       // console.log(decodedToken)
        req.decodedToken=decodedToken;
-       next();
+      next();
      });
     
   }

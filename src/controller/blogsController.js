@@ -94,7 +94,7 @@ let getBlogs = async function (req, res) {
             }
             let author = await authorModels.findById(queryValue["authorId"])
             if (!author) {
-                return res.status(404).send({ msg: "athorId is not from author collection", status: false })
+                return res.status(400).send({ msg: "athorId is not from author collection", status: false })
             }
 
             filter["authorId"] = queryValue["authorId"]
