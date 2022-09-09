@@ -204,21 +204,23 @@ let delBlogs = async function (req, res) {
 
     try {
 
-        let filter = { isDeleted: false, isPublished: false }
 
+        if(Object.keys(req.query).length==0){
+            return res.status(400).send({ msg: "No documnet is deleted, Please give atlest one filter", status: false })
+        }
+        let filter = { isDeleted: false, isPublished: false }
         if (req.query["authorId"]) {
             if (!mongoose.Types.ObjectId.isValid(req.query["authorId"])) {
 
                 return res.status(400).send({ msg: "authorId is is invalid", status: false })
             }
-
             filter["authorId"] = req.query["authorId"]
         }else{
-            
-            return res.status(400).send({status:false,msg:"authorId must be present"})
+            let decodedToken = req.decodedToken
+            console.log(decodedToken);
+            let userId1=decodedToken.userId
+            filter["authorId"] = userId1
         }
-
-
         if (req.query["category"]) {
 
             filter["category"] = req.query["category"]

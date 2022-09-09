@@ -22,7 +22,7 @@ let authentication = async function (req, res, next) {
 
   }
   catch (error) {
-    return res.status(500).send({status:false,msg:error.message});
+    return res.status(500).send({ status: false, msg: error.message });
   }
 }
 
@@ -42,18 +42,18 @@ let authorisation = async function (req, res, next) {
       if (!findId) return res.status(404).send({ msg: "No user resister", status: false })
       if (userId1 !== findId.authorId.toString()) return res.status(403).send({ msg: "user is not Authorised for this operation", status: false })
       next()
-    } else {
-      ID = req.query.authorId
-      if(!ID){
-        return res.status(400).send({ msg: "authorId is required", status: false })
-      }
+    }
+    ID = req.query.authorId
+    if (ID) {
       if (!mongoose.Types.ObjectId.isValid(ID)) return res.status(400).send({ msg: "authorId is InValid", status: false })
       if ((userId1 !== ID)) {
         return res.status(401).send({ msg: "user is not Authorised for this operation", status: false })
       }
-      next()
+      next();
+    } else {
+      next();
     }
-    
+
   } catch (err) {
     return res.status(500).send({ msg: err.message, status: false })
   }
