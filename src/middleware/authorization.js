@@ -2,12 +2,12 @@ const blogsModels = require("../Models/blogsModels")
 const jwt = require('jsonwebtoken');
 const { default: mongoose } = require("mongoose");
 
-let authentication = async function (req, res, next) {
+let authentication = function (req, res, next) {
 
   //authentication code
   try {
 
-    let token = req.headers["x-auth-token"];
+    let token = req.headers["x-api-key"];
     if (!token) return res.status(400).send({ status: false, msg: "token must be present" });
 
     jwt.verify(token, "This is secret key", (error, decodedToken) => {
@@ -42,22 +42,31 @@ let authorisation = async function (req, res, next) {
       if (!findId) return res.status(404).send({ msg: "No user resister", status: false })
       if (userId1 !== findId.authorId.toString()) return res.status(403).send({ msg: "user is not Authorised for this operation", status: false })
       next()
-    }
-    ID = req.query.authorId
-    if (ID) {
-      if (!mongoose.Types.ObjectId.isValid(ID)) return res.status(400).send({ msg: "authorId is InValid", status: false })
-      if ((userId1 !== ID)) {
-        return res.status(401).send({ msg: "user is not Authorised for this operation", status: false })
-      }
-      next();
     } else {
-      next();
+      return res.send({ status: false, msg: "Please provide BlogID" })
     }
-
   } catch (err) {
     return res.status(500).send({ msg: err.message, status: false })
   }
 }
 
+let delAuthorisation = async function (req, res, next) {
+
+  let decodedToken = req.decodedToken
+  console.log(decodedToken)
+  let ID = req.query.authorId
+  let userId1 = decodedToken["userId"];
+  if (ID) {
+    if (!mongoose.Types.ObjectId.isValid(ID)) return res.status(400).send({ msg: "authorId is InValid", status: false })
+    if ((userId1 !== ID)) {
+      return res.status(401).send({ msg: "user is not Authorised for this operation", status: false })
+    }
+    next();
+  } else {
+    next();
+  }
+}
+
+module.exports.delAuthorisation=delAuthorisation;
 module.exports.authentication = authentication;
 module.exports.authorisation = authorisation;

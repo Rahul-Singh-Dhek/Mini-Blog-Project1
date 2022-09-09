@@ -104,7 +104,7 @@ let login = async function (req, res) {
                 Title: "Mini Blogging Site"
             }, "This is secret key")
 
-         res.setHeader("x-auth-token", token);
+         res.setHeader("x-api-key", token);
        return res.status(200).send({ status: true, generatedToken: token });
     }
     catch (error) {
