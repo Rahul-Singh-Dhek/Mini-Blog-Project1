@@ -155,7 +155,7 @@ const updateBlogs = async function (req, res) {
         }
 
         if (Object.keys(bodyData).length == 0) {
-            return res.status(400).send({ msg: "User not update anything", data: blogExist, status: true })
+            return res.status(200).send({ msg: "User not update anything", data: blogExist, status: true })
         }
         if (bodyData.title) {
             if (typeof bodyData.title !== "string") {
@@ -189,7 +189,7 @@ const updateBlogs = async function (req, res) {
         }
         console.log(updateValue)
 
-        const updateDocument = await blogsModels.findByIdAndUpdate({ _id: blogId }, updateValue, { new: true })
+        const updateDocument = await blogsModels.findByIdAndUpdate({ _id: blogId, isDeleted : false }, updateValue, { new: true })
 
        return res.status(200).send({ msg: "blog update successfully", data: updateDocument, status: true })
 
