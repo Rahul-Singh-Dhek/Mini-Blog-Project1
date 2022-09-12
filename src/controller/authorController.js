@@ -45,7 +45,7 @@ let createAuthor = async function (req, res) {
         if (typeof data.email !== "string") {
             return res.status(400).send({ msg: "EmailId is required", status: false })
         }
-        if (!(/^[a-z0-9_]{3,}@[a-z]{3,}.[a-z]{3,6}$/).test(data.email)) {
+        if (!(/^[a-z0-9_]{3,}@[a-z]{3,}[.]{1}[a-z]{3,6}$/).test(data.email)) {
             return res.status(400).send({ msg: `Email is invalid`, status: false })
         }
 
