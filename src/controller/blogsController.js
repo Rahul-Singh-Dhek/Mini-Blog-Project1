@@ -217,28 +217,24 @@ let delBlogs = async function (req, res) {
             filter["authorId"] = req.query["authorId"]
         }else{
             let decodedToken = req.decodedToken
-            console.log(decodedToken);
+            // console.log(decodedToken);
             let userId1=decodedToken.userId
             filter["authorId"] = userId1
         }
         if (req.query["category"]) {
-
             filter["category"] = req.query["category"]
         }
 
         if (req.query["tags"]) {
-
             filter["tags"] = req.query["tags"]
         }
         if (req.query["subcategory"]) {
-
             filter["subcategory"] = req.query["subcategory"]
         }
 
         let data = await blogsModels.updateMany(filter, { isDeleted: true ,deletedAt: Date.now()},)
 
         if (data.modifiedCount == 0) {
-
             return res.status(404).send({ status: false, msg: "No document found" })
         }
 

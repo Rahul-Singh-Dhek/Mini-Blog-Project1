@@ -52,13 +52,13 @@ let createAuthor = async function (req, res) {
         const EmailAreadyExist = await authorModels.findOne({ email: data.email })
 
         if (EmailAreadyExist) {
-            return res.status(400).send({ msg: `Email already Exists`, status: false })
+            return res.status(407).send({ msg: `Email already Exists`, status: false })
         }
 
         if (typeof data.password !== "string") {
             return res.status(400).send({ msg: "Password is required", status: false })
         }
-        if (!/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&])[a-zA-Z0-9@#$%&]{8,20}$/.test(data.password)) {
+        if (!/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&])[a-zA-Z0-9@#$%&]{8,100}$/.test(data.password)) {
             return res.status(400).send({ msg: "Password should be min 8 ans max 20 character.It containt atleast--> 1 Uppercase letter, 1 Lowercase letter, 1 Number, 1 Special character" })
         }
 

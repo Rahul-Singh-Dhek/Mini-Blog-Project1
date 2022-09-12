@@ -34,7 +34,6 @@ let authorisation = async function (req, res, next) {
     console.log(decodedToken)
     let ID = req.params.blogId
     let userId1 = decodedToken["userId"];
-
     if (ID) {
 
       if (!mongoose.Types.ObjectId.isValid(ID)) return res.status(400).send({ msg: "blogId is InValid", status: false })
@@ -53,7 +52,7 @@ let authorisation = async function (req, res, next) {
 let delAuthorisation = async function (req, res, next) {
 
   let decodedToken = req.decodedToken
-  console.log(decodedToken)
+  // console.log(decodedToken)
   let ID = req.query.authorId
   let userId1 = decodedToken["userId"];
   if (ID) {
