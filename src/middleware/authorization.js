@@ -15,7 +15,6 @@ let authentication = function (req, res, next) {
         let message = (error.message == "jwt expired" ? "token is expired ,please login again" : "token is invalid,please recheck your token")
         return res.status(400).send({ status: false, msg: message })
       }
-      console.log(decodedToken)
       req.decodedToken = decodedToken;
       next();
     });
@@ -31,11 +30,9 @@ let authorisation = async function (req, res, next) {
   try {
 
     let decodedToken = req.decodedToken
-    // console.log(decodedToken)
     let ID = req.params.blogId
     let userId1 = decodedToken["userId"];
     if (ID) {
-
       if (!mongoose.Types.ObjectId.isValid(ID)) return res.status(400).send({ msg: "blogId is InValid", status: false })
       let findId = await blogsModels.findById(ID)
       if (!findId) return res.status(404).send({ msg: "No user resister", status: false })
@@ -52,7 +49,6 @@ let authorisation = async function (req, res, next) {
 let delAuthorisation = async function (req, res, next) {
 
   let decodedToken = req.decodedToken
-  // console.log(decodedToken)
   let ID = req.query.authorId
   let userId1 = decodedToken["userId"];
   if (ID) {

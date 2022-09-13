@@ -178,7 +178,6 @@ const updateBlogs = async function (req, res) {
             }
             updateValue["$push"]["subcategory"] = bodyData.subcategory
         }
-        // console.log(updateValue)
 
         const updateDocument = await blogsModels.findByIdAndUpdate({ _id: blogId, isDeleted : false }, updateValue, { returnDocument: "after" })
 
@@ -208,7 +207,6 @@ let delBlogs = async function (req, res) {
             filter["authorId"] = req.query["authorId"]
         }else{
             let decodedToken = req.decodedToken
-            // console.log(decodedToken);
             let userId1=decodedToken.userId
             filter["authorId"] = userId1
         }
@@ -246,14 +244,14 @@ const deleteBlogsById = async function (req, res) {
         let blogId = req.params.blogId;
 
         if (!mongoose.Types.ObjectId.isValid(blogId)) {
-            return res.status(400).send({ msg: `${blogId} is invalid`, status: false })
+            return res.status(400).send({ msg: `blogId is invalid`, status: false })
         }
         
         let result = await blogsModels.findOne({ _id: blogId, isDeleted: false });
 
         if (!result) return res.status(404).send({ status: false, msg: "Blog is already deleted" })
 
-        await blogsModels.findByIdAndUpdate({ _id: blogId, isDeleted: false }, { isDeleted: true ,deletedAt:Date.now()}, { new: true })
+        await blogsModels.findByIdAndUpdate({ _id: blogId, isDeleted: false }, { isDeleted: true ,deletedAt:Date.now()})
 
         return res.status(200).send();
 
