@@ -115,8 +115,6 @@ let getBlogs = async function (req, res) {
             filter["subcategory"] = queryValue["subcategory"]
         }
 
-        // console.log(filter)
-
         let data = await blogsModels.find(filter)
 
         if (data.length == 0) {
@@ -171,17 +169,10 @@ const updateBlogs = async function (req, res) {
             updateValue["$set"]["body"] = bodyData.body
         }
         if (bodyData.tags) {
-            // if (!Array.isArray(bodyData.tags)) {
-            //     return res.status(400).send({ msg: "Tags must be Array", status: false })
-            // }
-
             updateValue["$push"] = {}
             updateValue["$push"]["tags"] = bodyData.tags
         }
         if (bodyData.subcategory) {
-            // if (!Array.isArray(bodyData.subcategory)) {
-            //     return res.status(400).send({ msg: "subcategory must be Array", status: false })
-            // }
             if (!updateValue["$push"]) {
                 updateValue["$push"] = {}
             }
