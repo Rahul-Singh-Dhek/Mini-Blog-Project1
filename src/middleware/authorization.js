@@ -15,7 +15,7 @@ let authentication = function (req, res, next) {
         let message = (error.message == "jwt expired" ? "token is expired ,please login again" : "token is invalid,please recheck your token")
         return res.status(400).send({ status: false, msg: message })
       }
-      // console.log(decodedToken)
+      console.log(decodedToken)
       req.decodedToken = decodedToken;
       next();
     });
@@ -31,7 +31,7 @@ let authorisation = async function (req, res, next) {
   try {
 
     let decodedToken = req.decodedToken
-    console.log(decodedToken)
+    // console.log(decodedToken)
     let ID = req.params.blogId
     let userId1 = decodedToken["userId"];
     if (ID) {

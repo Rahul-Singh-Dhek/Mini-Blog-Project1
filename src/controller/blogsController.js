@@ -50,7 +50,7 @@ let createBlogs = async function (req, res) {
             return res.status(400).send({ msg: "category must be present", status: false })
         }
         if (typeof data.category !== "string") { 
-            return res.status(400).send({ msg: "category is required", status: false })
+            return res.status(400).send({ msg: "category must be in String", status: false })
         }
         
         if (data.tags) {
@@ -187,9 +187,9 @@ const updateBlogs = async function (req, res) {
             }
             updateValue["$push"]["subcategory"] = bodyData.subcategory
         }
-        console.log(updateValue)
+        // console.log(updateValue)
 
-        const updateDocument = await blogsModels.findByIdAndUpdate({ _id: blogId, isDeleted : false }, updateValue, { new: true })
+        const updateDocument = await blogsModels.findByIdAndUpdate({ _id: blogId, isDeleted : false }, updateValue, { returnDocument: "after" })
 
        return res.status(200).send({ msg: "blog update successfully", data: updateDocument, status: true })
 
@@ -262,7 +262,7 @@ const deleteBlogsById = async function (req, res) {
 
         if (!result) return res.status(404).send({ status: false, msg: "Blog is already deleted" })
 
-        let updated = await blogsModels.findByIdAndUpdate({ _id: blogId, isDeleted: false }, { isDeleted: true ,deletedAt:Date.now()}, { new: true })
+        await blogsModels.findByIdAndUpdate({ _id: blogId, isDeleted: false }, { isDeleted: true ,deletedAt:Date.now()}, { new: true })
 
         return res.status(200).send();
 

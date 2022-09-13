@@ -5,17 +5,17 @@ const blogsSchema = new mongoose.Schema({
 
     title: {
         type: String,
-        required: "Title is required",
+        required: "Title is mandatory",
         trim: true
     },
     body: {
         type: String,
-        required: "Body is required",
+        required: "Body is mandatory",
         trim: true
     },
     authorId: {
         type: ObjectId,
-        required: "AuthorId is required",
+        required: "AuthorId is mandatory",
         ref: "Newauthor",
         trim: true
     },
@@ -24,7 +24,7 @@ const blogsSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        required: "category is required",
+        required: "category is mandatory",
         trim: true
     },
     subcategory: [{ type: String, trim: true }],

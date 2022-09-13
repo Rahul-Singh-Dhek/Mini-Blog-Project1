@@ -4,31 +4,30 @@ const authorModel = new mongoose.Schema({
 
     fname: {
         type: String,
-        required: "First Name is required",
+        required: "First Name is mandatory",
         trim : true
     },
     lname: {
         type: String,
-        required: "Last Name is required",
+        required: "Last Name is mandatory",
         trim : true
     },
     title: {
         type: String,
-        required: "Title is required",
+        required: "Title is mandatory",
         enum: ["Mr", "Mrs", "Miss"],
         trim : true
     },
     email: {
         type: String,
-        required: "Email ID is required",
+        required: "Email is mandatory",
         unique: true,
         trim : true
     },
     password: {
         type: String,
-        required: "Password is required",
+        required: "Password is mandatory",
         trim : true
-
     }
 }, { timestamps: true })
 
