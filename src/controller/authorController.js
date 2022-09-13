@@ -21,7 +21,7 @@ let createAuthor = async function (req, res) {
         if(!data.lname){
             return res.status(400).send({ msg: "lname must be in present ", status: false })
         }
-        if(!/^[a-z]{2,100}$/i.test(data.lname)){
+        if(!/^[a-z ]{2,100}$/i.test(data.lname)){
             return res.status(400).send({msg : "last name should contain letter only and must be between 2 to 100 letters",status: false})
         }
         if(!data.title){

@@ -1,7 +1,4 @@
 # project1-miniBlog
-<!-- group-05 :Gautam Shyamsundar Dhakate, Anurag Srivastava, Rahul Gupta, Alok Patle -->
-
-<!-- Our first project -->
 
 **-- Author APIs /authors  --**
 

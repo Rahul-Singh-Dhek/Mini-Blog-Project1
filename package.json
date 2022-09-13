@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/Rahul-Singh-Dhek/project1-miniBlog.git"
   },
-  "author": "[\"Gautam\" , \"Anurag\" , \"Alok\", \"Rahul\" ]",
+  "author": "Rahul Singh Dhek",
   "license": "ISC",
   "homepage": "https://github.com/Rahul-Singh-Dhek/project1-miniBlog#readme",
   "dependencies": {
