@@ -62,6 +62,6 @@ let delAuthorisation = async function (req, res, next) {
   }
 }
 
-module.exports.delAuthorisation=delAuthorisation;
+module.exports.delAuthorisation = delAuthorisation;
 module.exports.authentication = authentication;
 module.exports.authorisation = authorisation;

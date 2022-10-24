@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken')
-
 const authorModels = require("../Models/authorModels");
 
 let createAuthor = async function (req, res) {
